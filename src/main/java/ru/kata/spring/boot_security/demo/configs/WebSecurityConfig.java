@@ -4,22 +4,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
     private final SuccessUserHandler successUserHandler;
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler) {
         this.successUserHandler = successUserHandler;
     }
 
-    @Override
+    /*@Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
@@ -45,5 +49,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .build();
 
         return new InMemoryUserDetailsManager(user);
+    }*/
+
+    @Bean
+    public SecurityFilterChain customSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(CsrfConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/user").authenticated()
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN"))
+                .formLogin(form -> form
+                        //.loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(successUserHandler).permitAll())
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
+        return http.build();
     }
+
 }

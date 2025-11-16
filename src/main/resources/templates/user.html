@@ -1,11 +1,33 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title></title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
-
-
+<form th:action="${isNew} ? '/users/create' : ${'/users/update?id=' + user.id}" method="post">
+    <div>
+        <label for="name">
+            Name
+            <input id="name" type="text" name="name" th:value="${isNew} ? '': ${user.name}" th:disabled="${!isAdmin}">
+        </label>
+    </div>
+    <div>
+        <label for="email">
+            E-mail
+            <input id="email" type="email" name="email" th:value="${isNew} ? '': ${user.email}" th:disabled="${!isAdmin}">
+        </label>
+    </div>
+    <h3>Roles</h3>
+    <div th:each="role : ${roles}">
+        <input th:id="${role}" type="checkbox" name="role" th:value="${role}" th:checked="${isNew} ? false : ${roleNames.contains(role)}">
+        <label th:for="${role}" th:text="${role}">Role name</label>
+    </div>
+    <button type="submit" th:if="${isAdmin}" th:text="${isNew} ? 'Create': 'Update'">Caption</button>
+</form>
+<form th:if="${!isNew && isAdmin}" th:action="@{/users/delete(id=${user.id})}" method="post">
+    <button type="submit">Delete</button>
+</form>
 </body>
 </html>
