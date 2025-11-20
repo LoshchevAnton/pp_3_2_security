@@ -32,10 +32,10 @@ public class User implements UserDetails {
         //
     }
 
-    public User(String name, String email, Role role) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
-        //this.role = role;
+        this.password = password;
     }
 
     public Integer getId() {

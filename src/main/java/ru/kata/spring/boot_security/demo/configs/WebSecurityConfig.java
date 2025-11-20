@@ -55,8 +55,10 @@ public class WebSecurityConfig {
     public SecurityFilterChain customSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/user").authenticated()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN"))
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/user").authenticated()
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         //.loginPage("/login")
                         .loginProcessingUrl("/login")

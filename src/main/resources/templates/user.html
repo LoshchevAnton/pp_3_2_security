@@ -6,11 +6,18 @@
     <title></title>
 </head>
 <body>
-<form th:action="${isNew} ? '/users/create' : ${'/users/update?id=' + user.id}" method="post">
+<div th:insert="~{fragments :: footer}"></div>
+<form th:action="${isNew} ? '/admin/create' : ${'/admin/update?id=' + user.id}" method="post">
     <div>
         <label for="name">
             Name
             <input id="name" type="text" name="name" th:value="${isNew} ? '': ${user.name}" th:disabled="${!isAdmin}">
+        </label>
+    </div>
+    <div>
+        <label for="password">
+            Password
+            <input id="password" type="password" name="password" th:value="${isNew} ? '': ${user.password}" th:disabled="${!isAdmin}">
         </label>
     </div>
     <div>
@@ -21,12 +28,12 @@
     </div>
     <h3>Roles</h3>
     <div th:each="role : ${roles}">
-        <input th:id="${role}" type="checkbox" name="role" th:value="${role}" th:checked="${isNew} ? false : ${roleNames.contains(role)}">
+        <input th:id="${role}" type="checkbox" name="roles" th:value="${role}" th:checked="${isNew} ? false : ${roleNames.contains(role)}" th:disabled="${!isAdmin}">
         <label th:for="${role}" th:text="${role}">Role name</label>
     </div>
     <button type="submit" th:if="${isAdmin}" th:text="${isNew} ? 'Create': 'Update'">Caption</button>
 </form>
-<form th:if="${!isNew && isAdmin}" th:action="@{/users/delete(id=${user.id})}" method="post">
+<form th:if="${!isNew && isAdmin}" th:action="@{/admin/delete(id=${user.id})}" method="post">
     <button type="submit">Delete</button>
 </form>
 </body>
