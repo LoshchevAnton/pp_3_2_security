@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.configs;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -23,8 +22,6 @@ public class UsersAuthenticationSuccessHandler implements AuthenticationSuccessH
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String url = "";
-        boolean isAdmin = false;
-        boolean isUser = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Set<String> authMap = authorities.stream().map(auth -> auth.getAuthority().toUpperCase()).collect(Collectors.toSet());
         if (authMap.contains("ADMIN")) {

@@ -10,7 +10,7 @@
 <div>
     <h1>Users</h1>
     <th:block th:each="user : ${users}">
-        <div><a th:href="@{'/admin/users?id=' + ${user.id}}" th:text="|${user.id}. ${user.name}|">user</a></div>
+        <div><a th:href="@{'/admin/user?id=' + ${user.id}}" th:text="|${user.id}. ${user.name}|">user</a></div>
     </th:block>
     <form th:action="@{/admin/create}" method="get">
         <button type="submit">Create</button>

@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.kata.spring.boot_security.demo.model.Role;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 public interface RoleDao extends JpaRepository<Role, Integer> {
-    List<Role> findRolesByNameIn(Collection<String> names, Sort sort);
+    Set<Role> findRolesByNameIn(Collection<String> names, Sort sort);
 }

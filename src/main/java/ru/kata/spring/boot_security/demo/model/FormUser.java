@@ -1,34 +1,27 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import jakarta.persistence.Column;
+import java.util.List;
 
 public class FormUser {
     private Integer id;
     private String name;
     private String email;
     private String password;
-    private String[] roles;
+    private List<String> roles;
 
     public String getPassword() {
-        if (password == null) {
-            return null;
-        }
-        if (password.startsWith("{noop}")) {
-            return password.substring("{noop}".length());
-        } else {
-            return password;
-        }
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String[] getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(String[] roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 
